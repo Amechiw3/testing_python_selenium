@@ -1,0 +1,44 @@
+# Entornos virtuales
+venv/
+.env/
+
+# Archivos de configuración locales
+config/*.yaml
+!config/config.yaml  # Excluir todos menos el archivo base de configuración
+
+# Archivos de logs y reportes
+reports/logs/
+reports/screenshots/
+reports/html/
+
+# Archivos temporales y de caché de Python
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+*.cache
+*.egg-info/
+
+# Archivos de Pytest
+*.xml
+*.html
+.cache/
+.pytest_cache/
+
+# Archivos de cobertura de código
+htmlcov/
+.coverage
+.coverage.*
+
+# Archivos de depuración o de entorno
+*.log
+*.debug
+
+# Archivos generados por IDEs
+.idea/
+.vscode/
+*.iml
+
+# Archivos del sistema operativo
+.DS_Store
+Thumbs.db
