@@ -36,7 +36,7 @@ project/
 ```
 ## 🛠️ Instalación
 1.  Clonar el repositorio
-git clone https://github.com/tu_usuario/tu_proyecto.git
+git clone https://github.com/Amechiw3/testing_python_selenium.git
 cd tu_proyecto
 
 2.Crear un entorno virtual
