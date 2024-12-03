@@ -33,7 +33,7 @@ project/
 ├── pytest.ini                   # Configuración global de Pytest
 ├── requirements.txt             # Dependencias del proyecto
 └── README.md                    # Documentación del proyecto
-
+```
 ## 🛠️ Instalación
 1.  Clonar el repositorio
 git clone https://github.com/tu_usuario/tu_proyecto.git
