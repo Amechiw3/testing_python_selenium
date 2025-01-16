@@ -3,11 +3,17 @@ from utils.wait_utils import WaitUtils
 from pages.base_page import BasePage
 
 class GooglePage(BasePage):
-    TEXTAREA_SEARCH = (By.CLASS_NAME, "gLFyf")
-    LOGIN_BUTTON = (By.CLASS_NAME, "gNO89b")
+    TEXTAREA_SEARCH = (By.XPATH, "//textarea[@class='gLFyf']")
+    LOGIN_BUTTON = (By.XPATH, "//input[@class='gNO89b']")
 
-    def __init__(self, driver):
+    def __init__(self, driver, config, logger_name, screenshotDIR, log_DIR, testName = ""):
         self.driver = driver
+        self.config = config
+        self.logger_name = logger_name
+        self.screenshotDIR = screenshotDIR
+        self.log_DIR = log_DIR
+        self.testName = testName
+        
         self.wait = WaitUtils(driver)  # Inicializar utilidades de espera
     
 

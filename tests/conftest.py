@@ -1,44 +1,63 @@
-import pytest
-from datetime import datetime
-import os
-import yaml
-from selenium import webdriver
-from _pytest.runner import CallInfo
 import base64
+import pytest
+import pytest_html
+import yaml
+import os
+from config.driver_manager import DriverManager
+from datetime import datetime
 
 @pytest.fixture(scope="session")
 def config():
-    """Carga la configuración desde el archivo YAML."""
-    with open("config/config.yaml", "r") as file:
-        return yaml.safe_load(file)
+    """
+    Carga la configuración desde el archivo environments.yaml.
+    Devuelve un diccionario con las configuraciones.
+    """
+    config_path = os.path.join(os.path.dirname(__file__), "../config/environments.yaml")
+    with open(config_path, "r") as f:
+        return yaml.safe_load(f).get("default", {})
 
-@pytest.fixture(scope="function")
+
+@pytest.fixture(scope="session")
 def driver(config):
-    """Inicializa el navegador según la configuración."""
-    browser = config['browser']
-    if browser == "chrome":
-        driver = webdriver.Chrome()
-    elif browser == "firefox":
-        driver = webdriver.Firefox()
-    else:
-        raise ValueError(f"Navegador no soportado: {browser}")
-    driver.maximize_window()
+    """
+    Inicializa y devuelve una instancia del WebDriver configurada.
+    Usa DriverManager para manejar el navegador.
+    """
+    driver_manager = DriverManager(config)
+    driver = driver_manager.get_driver(config)
+    driver.implicitly_wait(config.get("implicit_wait", 10))
+
     yield driver
+
+    # Cerrar el navegador después de todas las pruebas
     driver.quit()
 
 @pytest.hookimpl(tryfirst=True, hookwrapper=True)
 def pytest_runtest_makereport(item, call):
-    """Captura capturas de pantalla y las adjunta al reporte HTML si hay fallos."""
+    """
+    Hook de pytest para capturar el estado de las pruebas y ejecutar acciones en caso de fallo.
+    """
     outcome = yield
     report = outcome.get_result()
+    setattr(item, "rep_" + report.when, report)
 
-    # Verifica si la prueba falló
-    if report.when == "call" and report.failed:
-        driver = item.funcargs.get("driver")  # Obtén el driver desde los fixtures
-        if driver:
-            screenshots_dir = "reports/screenshots"
-            os.makedirs(screenshots_dir, exist_ok=True)
-            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-            screenshot_name = f"{item.name}_{timestamp}.png"
-            filepath = os.path.join(screenshots_dir, screenshot_name)
-            driver.save_screenshot(filepath)
+@pytest.fixture(scope="function", autouse=True)
+def capture_screenshot_on_failure(request, driver, config):
+    """
+    Captura una captura de pantalla si una prueba falla.
+    """
+    yield
+    if request.node.rep_call.failed:
+        # Obtener la ruta para guardar las capturas de pantalla
+        #screenshots_dir = config.get("screenshots_dir", "reports/screenshots")
+        screenshots_dir = f"{config.get('reports', {}).get('screenshots', "reports/screenshots/failure")}/failure"
+        os.makedirs(screenshots_dir, exist_ok=True)
+
+        # Generar el nombre del archivo de la captura
+        test_name = request.node.name
+        timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+        screenshot_path = os.path.join(screenshots_dir, f"{test_name}_{timestamp}.png")
+
+        # Guardar la captura de pantalla
+        driver.save_screenshot(screenshot_path)
+        print(f"Captura de pantalla guardada: {screenshot_path}")
