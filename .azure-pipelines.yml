@@ -1,8 +1,8 @@
 trigger:
-  - main  # O la rama que uses
+  - main
 
 pool:
-  vmImage: 'ubuntu-latest'  # O 'windows-latest' según tu entorno
+  vmImage: 'ubuntu-latest'
 
 steps:
 - task: UsePythonVersion@0
