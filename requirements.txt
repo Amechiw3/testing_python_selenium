@@ -2,5 +2,6 @@ selenium
 pytest
 pytest-html
 pytest-xdist
+pytest-azurepipelines
 pyyaml
 faker
