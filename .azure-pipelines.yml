@@ -1,0 +1,25 @@
+trigger:
+  - main  # O la rama que uses
+
+pool:
+  vmImage: 'ubuntu-latest'  # O 'windows-latest' según tu entorno
+
+steps:
+- task: UsePythonVersion@0
+  inputs:
+    versionSpec: '3.x'
+    addToPath: true
+
+- script: |
+    python -m pip install --upgrade pip
+    pip install -r requirements.txt
+  displayName: 'Instalar dependencias'
+
+- script: |
+    pytest --maxfail=5 --disable-warnings --junitxml=junit/test-results.xml
+  displayName: 'Ejecutar pruebas'
+
+- task: PublishTestResults@2
+  inputs:
+    testResultsFiles: 'junit/test-results.xml'
+    testRunTitle: 'Resultados de pruebas en Azure DevOps'
