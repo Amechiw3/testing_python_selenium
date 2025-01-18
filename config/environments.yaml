@@ -1,0 +1,20 @@
+default:
+  # Configuración del navegador
+  browser: "chrome"  # Valores posibles: chrome, firefox
+  headless: false    # Valores posibles: true, false
+  # Configuración general del proyecto
+  base_url: "https://google.com/"
+  # Configuración de tiempos
+  timeouts:
+    implicit_wait: 10    # Tiempo en segundos para esperas implícitas
+    explicit_wait: 20    # Tiempo en segundos para esperas explícitas
+  # Configuración de reportes
+  reports:
+    logs: "reports/logs"
+    html: "reports/html"
+    screenshots: "reports/screenshots"
+  credentials:
+    username: "AUTOES"
+    password: "TcaAuto"
+    company: "HOTEL DEMO PMS ALL V10"
+  environment: "default"
