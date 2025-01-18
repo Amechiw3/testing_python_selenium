@@ -5,6 +5,15 @@ pool:
   vmImage: 'ubuntu-latest'
 
 steps:
+- task: CopyFiles@2
+  inputs:
+    SourceFolder: '$(Build.SourcesDirectory)'
+    Contents: |
+      **/*
+      !.git/**/*
+    TargetFolder: '$(Build.SourcesDirectory)'
+    CleanTargetFolder: true
+    preserveTimestamp: true
 - task: UsePythonVersion@0
   inputs:
     versionSpec: '3.x'
@@ -23,3 +32,8 @@ steps:
   inputs:
     testResultsFiles: 'junit/test-results.xml'
     testRunTitle: 'Resultados de pruebas en Azure DevOps'
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
