@@ -20,9 +20,8 @@ class TestGoogle:
         self.log_DIR = f"{self.log_DIR}/{testName}"
 
         googlePage = GooglePage(driver, config, self.log_name, self.screenshotDIR, self.log_DIR, testName)
-        googlePage.navigate(config['base_url'])
+        googlePage.goto()
         googlePage.search("testing")
-        googlePage.take_screenshot(self.screenshotDIR, "01_Busqueda")
         time.sleep(10)
         
         assert True

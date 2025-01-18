@@ -15,14 +15,13 @@ logger = setup_logger()
 
 class DriverManager:
     def __init__(self, config):
-        #logger.info(f"Inicializando DriverManager con configuración: {config}")
+        logger.info(f"Inicializando DriverManager con configuración: {config}")
         self.config = config
 
-    def get_driver(self, config):
+    def get_driver(self):
         browser = self.config.get("browser", "chrome").lower()
         headless = self.config.get("headless", False)
         selenium_grid_url = self.config.get("selenium_grid_url", None)
-        logger.info(f"Inicializando DriverManager con configuración: {config}")
 
         if browser == "chrome":
             options = ChromeOptions()
@@ -37,13 +36,21 @@ class DriverManager:
 
             service = ChromeService(executable_path=self._get_driver_path("chromedriver.exe"))
             return webdriver.Chrome(service=service, options=options)
-        
+        elif browser == "firefox":
+            options = FirefoxOptions()
+            if headless:
+                options.add_argument("--headless")
+            options.add_argument("--start-maximized")
+            service = FirefoxService(executable_path=self._get_driver_path("geckodriver.exe"))
+            return webdriver.Firefox(service=service, options=options)
         elif browser == "edge":
             options = EdgeOptions()
+            if headless:
+                options.add_argument("--headless")
             options.add_argument("--start-maximized")
             options.add_experimental_option("excludeSwitches", ["enable-logging"])
             service = EdgeService(executable_path=self._get_driver_path("msedgedriver.exe"))
-            return webdriver.Chrome(service=service, options=options)
+            return webdriver.Edge(service=service, options=options)
         else:
             raise ValueError(f"Navegador '{browser}' no está soportado.")
 
@@ -55,10 +62,4 @@ class DriverManager:
         :return: Ruta absoluta del controlador
         """
         base_dir = os.path.dirname(os.path.abspath(__file__))
-        driver_path = os.path.join(base_dir, "../drivers", driver_name)
-
-        # Verifica si el archivo existe
-        if not os.path.isfile(driver_path):
-            raise ValueError(f"El archivo no es un archivo válido: {driver_path}")
-        
-        return driver_path
+        return os.path.join(base_dir, "../drivers", driver_name)

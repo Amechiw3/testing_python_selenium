@@ -1,18 +1,35 @@
+import os
+import yaml
+from datetime import datetime
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-import os
-from datetime import datetime
+from utils.wait_utils import WaitUtils
 
 class BasePage:
     def __init__(self, driver):
         self.driver = driver
+        self.wait = WaitUtils(driver)  # Inicializar utilidades de espera
+    
+    def load_data(self, filename):
+        """Carga los datos de un archivo YAML."""
+        data_path = os.path.join(os.path.dirname(__file__), f"../data/{filename}.yaml")
+        with open(data_path, "r") as f:
+            return yaml.safe_load(f).get("default", {})
 
     def navigate(self, url):
         """Navega a una URL específica."""
         self.driver.get(url)
+
+    def get_page_title(self):
+        """Obtiene el título de la página."""
+        return self.driver.title
+
+    def get_current_url(self):
+        """Obtiene la URL actual."""
+        return self.driver.current_url
 
     def find_element(self, locator):
         """Encuentra un elemento único en la página."""
@@ -87,6 +104,44 @@ class BasePage:
     def switch_to_default_content(self):
         """Regresa al contenido principal de la página."""
         self.driver.switch_to.default_content()
+    
+    def switch_to_alert(self):
+        """Cambia al alert."""
+        return self.driver.switch_to.alert
+    
+    def accept_alert(self):
+        """Acepta el alert."""
+        self.switch_to_alert().accept()
+    
+    def dismiss_alert(self):
+        """Rechaza el alert."""
+        self.switch_to_alert().dismiss()
+    
+    def get_alert_text(self):
+        """Obtiene el texto del alert."""
+        return self.switch_to_alert().text
+    
+    def wait_for_alert(self, timeout=10):
+        """Espera a que el alert esté presente."""
+        WebDriverWait(self.driver, timeout).until(EC.alert_is_present())
+
+    def scroll_to_top(self):
+        """Hace scroll al inicio de la página."""
+        self.driver.execute_script("window.scrollTo(0, 0);")
+    
+    def scroll_to_bottom(self):
+        """Hace scroll al final de la página."""
+        self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+
+    def scroll_to_element(self, locator):
+        """Hace scroll a un elemento."""
+        element = self.find_element(locator)
+        self.driver.execute_script("arguments[0].scrollIntoView();", element)
+
+    def scroll_to_element_center(self, locator):
+        """Hace scroll al centro de un elemento."""
+        element = self.find_element(locator)
+        self.driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", element)
 
     def take_screenshot(self, nodo = "", name="screenshot"):
         """Captura una captura de pantalla con un nombre único."""

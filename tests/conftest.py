@@ -1,6 +1,7 @@
 import base64
 import pytest
 import pytest_html
+import pytest_html.extras
 import yaml
 import os
 from config.driver_manager import DriverManager
@@ -24,13 +25,14 @@ def driver(config):
     Usa DriverManager para manejar el navegador.
     """
     driver_manager = DriverManager(config)
-    driver = driver_manager.get_driver(config)
-    driver.implicitly_wait(config.get("implicit_wait", 10))
+    driver = driver_manager.get_driver()
+    driver.implicitly_wait(config.get("timeouts", {}).get("implicit_wait", 10))
 
     yield driver
-
-    # Cerrar el navegador después de todas las pruebas
     driver.quit()
+
+def pytest_html_report_title(report):  
+    report.title = "Pytest HTML Report" 
 
 @pytest.hookimpl(tryfirst=True, hookwrapper=True)
 def pytest_runtest_makereport(item, call):
@@ -43,13 +45,13 @@ def pytest_runtest_makereport(item, call):
 
 @pytest.fixture(scope="function", autouse=True)
 def capture_screenshot_on_failure(request, driver, config):
+
     """
     Captura una captura de pantalla si una prueba falla.
     """
     yield
     if request.node.rep_call.failed:
         # Obtener la ruta para guardar las capturas de pantalla
-        #screenshots_dir = config.get("screenshots_dir", "reports/screenshots")
         screenshots_dir = f"{config.get('reports', {}).get('screenshots', "reports/screenshots/failure")}/failure"
         os.makedirs(screenshots_dir, exist_ok=True)
 

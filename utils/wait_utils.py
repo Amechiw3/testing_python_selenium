@@ -48,6 +48,22 @@ class WaitUtils:
         except TimeoutException:
             raise TimeoutException(f"El elemento con {by}='{locator}' no fue clickeable después de {self.timeout} segundos.")
 
+    def wait_for_element_typing(self, by, locator):
+        """
+        Espera a que un elemento esté listo para escribir texto.
+        
+        :param by: Método de búsqueda (e.g., By.ID, By.XPATH).
+        :param locator: Ubicación del elemento.
+        :return: WebElement encontrado.
+        :raises TimeoutException: Si el elemento no está listo para escribir dentro del tiempo límite.
+        """
+        try:
+            return WebDriverWait(self.driver, self.timeout).until(
+                EC.element_to_be_clickable((by, locator))
+            )
+        except TimeoutException:
+            raise TimeoutException(f"El elemento con {by}='{locator}' no estuvo listo para escribir después de {self.timeout} segundos.")
+
     def wait_for_element_present(self, by, locator):
         """
         Espera a que un elemento esté presente en el DOM.
@@ -93,7 +109,16 @@ class WaitUtils:
         """Espera a que un elemento tenga un atributo con un valor específico."""
         try:
             return WebDriverWait(self.driver, self.timeout).until(
-                EC.attribute_to_include((by, locator), attribute, value)
+                EC.element_attribute_to_include((by, locator), attribute, value)
             )
         except TimeoutException:
             raise TimeoutException(f"El atributo '{attribute}' del elemento con {by}='{locator}' no contiene el valor '{value}' después de {self.timeout} segundos.")
+        
+    def set_implicit_wait(self, timeout=None):
+        """
+        Configura una espera implícita para el WebDriver.
+        :param timeout: Tiempo en segundos para la espera implícita (por defecto, usa el timeout inicial).
+        """
+        wait_time = timeout if timeout is not None else self.timeout
+        self.driver.implicitly_wait(wait_time)
+        print(f"Espera implícita configurada a {wait_time} segundos.")

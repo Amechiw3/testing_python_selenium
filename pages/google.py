@@ -13,10 +13,10 @@ class GooglePage(BasePage):
         self.screenshotDIR = screenshotDIR
         self.log_DIR = log_DIR
         self.testName = testName
-        
-        self.wait = WaitUtils(driver)  # Inicializar utilidades de espera
     
-
+    def goto(self):
+        self.navigate(self.config['base_url'])
+    
     def search(self, busqueda):
         self.send_keys(self.TEXTAREA_SEARCH, busqueda)
         self.click(self.LOGIN_BUTTON)

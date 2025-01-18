@@ -1,15 +1,14 @@
 # Define la estructura de carpetas
 $folders = @(
     "config",
+    "data",
     "drivers",
     "pages",
     "reports/html",
     "reports/logs",
     "reports/screenshots",
-    "tests/auth",
-    "tests/search",
-    "utils",
-    "ci_cd"
+    "tests",
+    "utils"
 )
 
 # Crear carpetas
@@ -18,13 +17,16 @@ foreach ($folder in $folders) {
 }
 
 $files = @(
-    "config/config.yaml",
+    "config/environments.yaml",
+    "config/driver_manager.py",
     "pages/base_page.py",
+    "pages/login.py",
+    "pages/navegacion.py",
     "reports/html/report.html",
     "reports/logs/test.log",
     "reports/screenshots",
+    "tests/__init__.py",
     "tests/conftest.py",
-    "tests/search",
     "utils/config.py",
     "utils/logger.py",
     "utils/wait_utils.py",
