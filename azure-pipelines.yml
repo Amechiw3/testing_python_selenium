@@ -1,39 +1,61 @@
 trigger:
-  - main
+  branches:
+    include:
+      - main  # Configura la rama que dispara el pipeline
 
-pool:
-  vmImage: 'ubuntu-latest'
+variables:
+  pythonVersion: '3.8'  # Define la versión de Python
+  reportsPath: 'reports/html/report'
 
-steps:
-- task: CopyFiles@2
-  inputs:
-    SourceFolder: '$(Build.SourcesDirectory)'
-    Contents: |
-      **/*
-      !.git/**/*
-    TargetFolder: '$(Build.SourcesDirectory)'
-    CleanTargetFolder: true
-    preserveTimestamp: true
-- task: UsePythonVersion@0
-  inputs:
-    versionSpec: '3.x'
-    addToPath: true
+stages:
+  - build
+  - test
+  - deploy
 
-- script: |
-    python -m pip install --upgrade pip
-    pip install -r requirements.txt
-  displayName: 'Instalar dependencias'
+# Plantilla de trabajo para instalar dependencias y ejecutar pruebas
+jobs:
+  - job: InstallAndTest
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+      - task: UsePythonVersion@0
+        inputs:
+          versionSpec: '$(pythonVersion)'
+          addToPath: true
 
-- script: |
-    pytest --maxfail=5 --disable-warnings --junitxml=junit/test-results.xml
-  displayName: 'Ejecutar pruebas'
+      - script: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+        displayName: 'Instala dependencias'
 
-- task: PublishTestResults@2
-  inputs:
-    testResultsFiles: 'junit/test-results.xml'
-    testRunTitle: 'Resultados de pruebas en Azure DevOps'
-- task: PublishBuildArtifacts@1
-  inputs:
-    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-    ArtifactName: 'drop'
-    publishLocation: 'Container'
+      - script: |
+          pytest --junitxml=$(reportsPath).xml --html=$(reportsPath).html --self-contained-html
+        displayName: 'Ejecuta pruebas con Pytest'
+
+      - task: PublishTestResults@2
+        inputs:
+          testResultsFormat: 'JUnit'
+          testResultsFiles: '**/reports/*.xml'
+          failTaskOnFailedTests: true
+
+      - task: PublishPipelineArtifact@1
+        inputs:
+          targetPath: 'reports'
+          artifact: 'TestReports'
+        displayName: 'Publica artefactos del reporte'
+
+# Definición de los jobs
+build: 
+  stage: build
+  jobs:
+    - template: InstallAndTest
+
+test:
+  stage: test
+  jobs:
+    - template: InstallAndTest
+
+deploy:
+  stage: deploy
+  jobs:
+    - template: InstallAndTest
