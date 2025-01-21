@@ -1,9 +1,9 @@
 default:
   # Configuración del navegador
   browser: "chrome"  # Valores posibles: chrome, firefox
-  headless: true    # Valores posibles: true, false
+  headless: false    # Valores posibles: true, false
   # Configuración general del proyecto
-  base_url: "https://google.com/"
+  base_url: "https://pms-demo.innsist.tca.com/"
   # Configuración de tiempos
   timeouts:
     implicit_wait: 10    # Tiempo en segundos para esperas implícitas
@@ -13,6 +13,7 @@ default:
     logs: "reports/logs"
     html: "reports/html"
     screenshots: "reports/screenshots"
+    failures: "reports/screenshots/failure"
   credentials:
     username: "AUTOES"
     password: "TcaAuto"
