@@ -7,16 +7,20 @@ import os
 from config.driver_manager import DriverManager
 from datetime import datetime
 
-@pytest.fixture(scope="session")
-def config():
+CONFIG_PATH = os.path.join(os.path.dirname(__file__), "../config/environments.yaml")
+DEFAULT_SCREENSHOTS_DIR = "reports/screenshots/failure"
+
+def load_config():
     """
     Carga la configuración desde el archivo environments.yaml.
     Devuelve un diccionario con las configuraciones.
     """
-    config_path = os.path.join(os.path.dirname(__file__), "../config/environments.yaml")
-    with open(config_path, "r") as f:
+    with open(CONFIG_PATH, "r") as f:
         return yaml.safe_load(f).get("default", {})
 
+@pytest.fixture(scope="session")
+def config():
+    return load_config()
 
 @pytest.fixture(scope="session")
 def driver(config):
@@ -45,14 +49,13 @@ def pytest_runtest_makereport(item, call):
 
 @pytest.fixture(scope="function", autouse=True)
 def capture_screenshot_on_failure(request, driver, config):
-
     """
     Captura una captura de pantalla si una prueba falla.
     """
     yield
     if request.node.rep_call.failed:
         # Obtener la ruta para guardar las capturas de pantalla
-        screenshots_dir = f"{config.get('reports', {}).get('screenshots', "reports/screenshots/failure")}/failure"
+        screenshots_dir = config.get('reports', {}).get('failures', DEFAULT_SCREENSHOTS_DIR)
         os.makedirs(screenshots_dir, exist_ok=True)
 
         # Generar el nombre del archivo de la captura
@@ -61,5 +64,8 @@ def capture_screenshot_on_failure(request, driver, config):
         screenshot_path = os.path.join(screenshots_dir, f"{test_name}_{timestamp}.png")
 
         # Guardar la captura de pantalla
-        driver.save_screenshot(screenshot_path)
-        print(f"Captura de pantalla guardada: {screenshot_path}")
+        try:
+            driver.save_screenshot(screenshot_path)
+            print(f"Captura de pantalla guardada: {screenshot_path}")
+        except Exception as e:
+            print(f"Error al guardar la captura de pantalla: {e}")

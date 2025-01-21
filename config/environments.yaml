@@ -1,7 +1,7 @@
 default:
   # Configuración del navegador
   browser: "chrome"  # Valores posibles: chrome, firefox
-  headless: false    # Valores posibles: true, false
+  headless: true    # Valores posibles: true, false
   # Configuración general del proyecto
   base_url: "https://google.com/"
   # Configuración de tiempos
