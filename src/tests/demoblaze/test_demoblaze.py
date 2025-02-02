@@ -1,10 +1,9 @@
 from datetime import datetime
 import time
 import pytest
-from utils.wait_utils import WaitUtils
 from pages.demoblazePage import demoblazePage
 
-@pytest.mark.google
+@pytest.mark.blaze
 class TestDemoblaze:
     log_name = "TestDemoblaze_Logger"
     log_date = datetime.now().date()
