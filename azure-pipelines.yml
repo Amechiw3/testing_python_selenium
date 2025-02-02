@@ -5,7 +5,8 @@ trigger:
 
 variables:
   pythonVersion: '3.8'  # Define la versión de Python
-  reportsPath: 'reports/html/report'
+  reportsHTMLPath: 'reports/html/report'
+  reportsXMLPath: 'reports/xml/report'
 
 stages:
   - build
@@ -29,7 +30,7 @@ jobs:
         displayName: 'Instala dependencias'
 
       - script: |
-          pytest --junitxml=$(reportsPath).xml --html=$(reportsPath).html --self-contained-html
+          pytest --junitxml=$(reportsXMLPath).xml --html=$(reportsHTMLPath).html --self-contained-html
         displayName: 'Ejecuta pruebas con Pytest'
 
       - task: PublishTestResults@2

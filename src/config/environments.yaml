@@ -3,7 +3,7 @@ default:
   browser: "chrome"  # Valores posibles: chrome, firefox
   headless: false    # Valores posibles: true, false
   # Configuración general del proyecto
-  base_url: "https://pms-demo.innsist.tca.com/"
+  base_url: "https://www.demoblaze.com/"
   # Configuración de tiempos
   timeouts:
     implicit_wait: 10    # Tiempo en segundos para esperas implícitas
