@@ -9,54 +9,64 @@ variables:
   reportsXMLPath: 'reports/xml/report'
 
 stages:
-  - build
-  - test
-  - deploy
+  - stage: BuildAndTest
+    jobs:
+      - job: InstallAndTest
+        pool:
+          vmImage: 'windows-latest'
+        steps:
+          - task: UsePythonVersion@0
+            inputs:
+              versionSpec: '$(pythonVersion)'
+              addToPath: true
 
-# Plantilla de trabajo para instalar dependencias y ejecutar pruebas
-jobs:
-  - job: InstallAndTest
-    pool:
-      vmImage: 'ubuntu-latest'
-    steps:
-      - task: UsePythonVersion@0
-        inputs:
-          versionSpec: '$(pythonVersion)'
-          addToPath: true
+          - task: Cache@2
+            inputs:
+              key: 'pip | "$(Agent.OS)" | requirements.txt'
+              restoreKeys: |
+                pip | "$(Agent.OS)"
+              path: $(Pipeline.Workspace)/.pip-cache
+            displayName: 'Cache de dependencias de pip'
 
-      - script: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-        displayName: 'Instala dependencias'
+          - script: |
+              python -m pip install --upgrade pip
+              pip install -r requirements.txt --cache-dir $(Pipeline.Workspace)/.pip-cache
+            displayName: 'Instala dependencias'
 
-      - script: |
-          pytest --junitxml=$(reportsXMLPath).xml --html=$(reportsHTMLPath).html --self-contained-html
-        displayName: 'Ejecuta pruebas con Pytest'
+          - script: |
+              pip install flake8 black pytest-cov pytest-xdist safety bandit
+              flake8 src
+              black --check src
+              safety check --full-report
+              bandit -r src
+              pytest --junitxml=$(reportsXMLPath).xml --html=$(reportsHTMLPath).html --self-contained-html --cov=src --cov-report=xml:reports/coverage.xml -n auto
+            displayName: 'Ejecuta validaciones y pruebas'
 
-      - task: PublishTestResults@2
-        inputs:
-          testResultsFormat: 'JUnit'
-          testResultsFiles: '**/reports/*.xml'
-          failTaskOnFailedTests: true
+          - task: PublishTestResults@2
+            inputs:
+              testResultsFormat: 'JUnit'
+              testResultsFiles: '**/reports/*.xml'
+              failTaskOnFailedTests: true
 
-      - task: PublishPipelineArtifact@1
-        inputs:
-          targetPath: 'reports'
-          artifact: 'TestReports'
-        displayName: 'Publica artefactos del reporte'
+          - task: PublishCodeCoverageResults@1
+            inputs:
+              codeCoverageTool: 'Cobertura'
+              summaryFileLocation: 'reports/coverage.xml'
+              failIfCoverageEmpty: true
 
-# Definición de los jobs
-build: 
-  stage: build
-  jobs:
-    - template: InstallAndTest
+          - task: PublishPipelineArtifact@1
+            inputs:
+              targetPath: 'reports'
+              artifact: 'TestReports'
+            displayName: 'Publica artefactos del reporte'
 
-test:
-  stage: test
-  jobs:
-    - template: InstallAndTest
-
-deploy:
-  stage: deploy
-  jobs:
-    - template: InstallAndTest
+  - stage: Deploy
+    dependsOn: BuildAndTest
+    jobs:
+      - job: Deploy
+        pool:
+          vmImage: 'windows-latest'
+        steps:
+          - script: |
+              echo "Implementando la aplicación..."
+            displayName: 'Despliegue de la aplicación'

@@ -1,7 +1,9 @@
 selenium
+webdriver_manager
 pytest
 pytest-html
 pytest-xdist
 pytest-azurepipelines
+pytest-cov
 pyyaml
 faker
