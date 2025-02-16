@@ -5,7 +5,7 @@ Este proyecto implementa pruebas automatizadas utilizando **Selenium WebDriver**
 
 ## 📚 Estructura del Proyecto
 
-```
+```plaintext
 testing_python_selenium/
 ├── reports/                     		# Carpeta para reportes generados
 │   ├── coverage/                		# Reportes de coverage
