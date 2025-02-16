@@ -24,7 +24,7 @@ $files = @(
     "src/config/driver_manager.py",
     "src/pages/base_page.py",
     "src/pages/login.py",
-    "src/pages/navegacion.py",w
+    "src/pages/navegacion.py",
     "src/tests/__init__.py",
     "src/tests/conftest.py",
     "src/utils/config.py",

@@ -1,11 +1,12 @@
-from datetime import datetime
 import time
 import pytest
+import unittest
+from datetime import datetime
 from pages.demoblazePage import demoblazePage
 
 
 @pytest.mark.blaze
-class TestDemoblaze:
+class TestDemoblaze(unittest.TestCase):
     log_name = "TestDemoblaze_Logger"
     log_date = datetime.now().date()
     log_datetime = datetime.now().strftime("%Y-%m-%d %H.%M.%S")
@@ -23,5 +24,3 @@ class TestDemoblaze:
         )
         demoblaze.go_to_page()
         time.sleep(10)
-
-        assert True

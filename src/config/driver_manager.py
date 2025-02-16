@@ -10,6 +10,8 @@ from webdriver_manager.firefox import GeckoDriverManager
 
 from selenium.webdriver.edge.service import Service as EdgeService
 from selenium.webdriver.edge.options import Options as EdgeOptions
+from webdriver_manager.microsoft import EdgeChromiumDriverManager
+
 from utils.logger import setup_logger
 
 logger = setup_logger()
@@ -71,7 +73,9 @@ class DriverManager:
         if headless:
             options.add_argument("--headless")
         options.add_argument("--start-maximized")
-        # service = FirefoxService(executable_path=self._get_driver_path(self.DRIVER_PATHS[self.FIREFOX]))
+        service = FirefoxService(
+            executable_path=self._get_driver_path(self.DRIVER_PATHS[self.FIREFOX])
+        )
         service = FirefoxService(executable_path=GeckoDriverManager().install())
         return webdriver.Firefox(service=service, options=options)
 
@@ -84,6 +88,7 @@ class DriverManager:
         service = EdgeService(
             executable_path=self._get_driver_path(self.DRIVER_PATHS[self.EDGE])
         )
+        service = EdgeService(executable_path=EdgeChromiumDriverManager().install())
         return webdriver.Edge(service=service, options=options)
 
     @staticmethod
@@ -104,4 +109,5 @@ class DriverManager:
         """
         base_dir = os.path.dirname(os.path.abspath(__file__))
         download_dir = os.path.join(base_dir, "../drivers/downloads")
+        os.makedirs(download_dir, exist_ok=True)
         return os.path.realpath(download_dir)
