@@ -14,17 +14,17 @@ testing_python_selenium/
 │   ├── screenshots/             		# Capturas de pantalla
 │   ├── xml/             				# Reportes de junit
 ├── src/
-│	├── config/
-│   │	├── config.yaml              	# Configuración general
-│   │	├── config_dev.yaml          	# Configuración para desarrollo
-│   │	├── config_staging.yaml      	# Configuración para staging
-│   │	├── config_production.yaml   	 Configuración para producción
-│	├── pages/
-│   │	├──  base_page.py             	# Clase base para todas las páginas
-│	├── tests/
-│   │	├── conftest.py              	# Configuración de Pytest y fixtures
-│	├── utils/
-│   │	├── config.py                	 Clase para manejar configuraciones
+│   ├── config/
+│   │   ├── config.yaml              	# Configuración general
+│   │   ├── config_dev.yaml          	# Configuración para desarrollo
+│   │   ├── config_staging.yaml      	# Configuración para staging
+│   │   ├── config_production.yaml   	 Configuración para producción
+│   ├── pages/
+│   │   ├── base_page.py             	# Clase base para todas las páginas
+│   ├── tests/
+│   │   ├── conftest.py              	# Configuración de Pytest y fixtures
+│   ├── utils/
+│   │   ├── config.py                	 Clase para manejar configuraciones
 ├── pytest.ini                   		# Configuración global de Pytest
 ├── requirements.txt             		# Dependencias del proyecto
 └── README.md                    		# Documentación del proyecto
