@@ -1,0 +1,23 @@
+parameters:
+  - name: mark
+    type: string
+
+steps:
+  - script: |
+      pytest -m ${{ parameters.mark }} --junitxml=$(reportsXMLPath)-${{ parameters.mark }}.xml --html=$(reportsHTMLPath)-${{ parameters.mark }}.html
+    displayName: 'Ejecuta pruebas'
+
+  - task: PublishTestResults@2
+    inputs:
+      testResultsFormat: 'JUnit'
+      testResultsFiles: 'test-output.xml'
+      mergeTestResults: true
+      failTaskOnFailedTests: true
+      testRunTitle: 'TestReports'
+    displayName: 'Publica resultados de pruebas'
+
+  - task: PublishPipelineArtifact@1
+    inputs:
+      targetPath: 'reports'
+      artifact: 'TestReports'
+    displayName: 'Publica artefactos del reporte'

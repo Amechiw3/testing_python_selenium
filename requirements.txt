@@ -3,7 +3,9 @@ webdriver_manager
 pytest
 pytest-html
 pytest-xdist
+pytest-ads-testplan
 pytest-azurepipelines
 pytest-cov
 pyyaml
 faker
+python-dateutil

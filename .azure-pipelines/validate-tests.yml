@@ -1,0 +1,14 @@
+parameters:
+  - name: mark
+    type: string
+
+steps:
+  - script: |
+      pip install flake8 black pytest-cov pytest-xdist safety bandit
+      flake8 src
+      black --check src
+      safety check --full-report
+      bandit -r src
+      pytest -m ${{ parameters.mark }} --junitxml=$(reportsXMLPath).xml --html=$(reportsHTMLPath).html --self-contained-html
+    displayName: 'Ejecuta validaciones y pruebas'
+

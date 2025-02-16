@@ -8,6 +8,7 @@ variables:
   pythonVersion: '3.13'  # Define la versión de Python
   reportsHTMLPath: 'reports/html/report'
   reportsXMLPath: 'reports/xml/report'
+  TEST_MARKS: 'blaze'  # Lista de marks
 
 stages:
   - stage: BuildAndTest
@@ -33,7 +34,9 @@ stages:
               python -m pip install --upgrade pip
               pip install -r requirements.txt --cache-dir $(Pipeline.Workspace)/.pip-cache
             displayName: 'Instala dependencias'
-        
-          - template: .azure-pipelines/run-tests.yml
-            parameters: 
-                mark: '$(TEST_MARK)'
+          
+          # Ejecutar pruebas para cada marca definida en TEST_MARKS - ${{ each var in split(variables.TEST_MARKS, ', ') }}:
+          - ${{ each mark in split(variables.TEST_MARKS, ' ') }}:
+            - template: run-tests.yml
+              parameters:
+                mark: ${{ mark }}

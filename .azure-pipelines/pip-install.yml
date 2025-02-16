@@ -1,0 +1,5 @@
+steps:
+  - script: |
+      python -m pip install --upgrade pip
+      pip install -r requirements.txt --cache-dir $(Pipeline.Workspace)/.pip-cache
+    displayName: 'Instalar dependencias'
