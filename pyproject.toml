@@ -37,7 +37,7 @@ junit_suite_name = "TestSuite"
 junit_family = "xunit2"
 
 [tool.flake8]
-max-line-length = 10
+max-line-length = 18
 ignore = [
     "E203",
     "E266",
