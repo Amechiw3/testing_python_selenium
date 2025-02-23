@@ -7,29 +7,28 @@ Este proyecto implementa pruebas automatizadas utilizando **Selenium WebDriver**
 
 ```plaintext
 testing_python_selenium/
-├── reports/							# Carpeta para reportes generados
-│   ├── coverage/						# Reportes de coverage
-│   ├── html/							# Reportes en HTML
-│   ├── logs/							# Archivos de logs
-│   ├── screenshots/					# Capturas de pantalla
-│   ├── xml/							# Reportes de junit
+├── reports/                               # Carpeta para reportes generados
+│   ├── coverage/                          # Reportes de coverage
+│   ├── html/							                       # Reportes en HTML
+│   ├── logs/							                       # Archivos de logs
+│   ├── screenshots/					                  # Capturas de pantalla
+│   ├── xml/							                        # Reportes de junit
 ├── src/
 │   ├── config/
-│   │   ├── config.yaml					# Configuración general
-│   │   ├── config_dev.yaml				# Configuración para desarrollo
-│   │   ├── config_staging.yaml			# Configuración para staging
-│   │   ├── config_production.yaml		# Configuración para producción
+│   │   ├── config.yaml					              # Configuración general
+│   │   ├── config_dev.yaml				           # Configuración para desarrollo
+│   │   ├── config_staging.yaml			        # Configuración para staging
+│   │   ├── config_production.yaml        # Configuración para producción
 │   ├── pages/
-│   │   ├── base_page.py				# Clase base para todas las páginas
+│   │   ├── base_page.py                  # Clase base para todas las páginas
 │   ├── tests/
-│   │   ├── conftest.py					# Configuración de Pytest y fixtures
+│   │   ├── conftest.py                   # Configuración de Pytest y fixtures
 │   ├── utils/
-│   │   ├── config.py					# Clase para manejar configuraciones
-├── .flake8								# Configuracion de reglas y opciones de flake. para mantener un estandar en el codigo escrito
-├── .pre-commit-config.yaml				# Configuración de hooks de pre-commit
-├── azure-pipelines.yml					# Archivo de configuración para la CI con Azure Pipelines, que define los pasos de construcción, pruebas y despliegue del proyecto.
-├── pytest.ini							# Configuración global de Pytest
-├── requirements.txt					# Dependencias del proyecto
+│   │   ├── config.py					                # Clase para manejar configuraciones
+├── .pre-commit-config.yaml               # Configuración de hooks de pre-commit
+├── .azure-pipelines.yml                  # Archivo de configuración para la CI con Azure Pipelines, que define los pasos de construcción, pruebas y despliegue del proyecto.
+├── pytest.ini                            # Configuración global de Pytest
+├── requirements.txt                      # Dependencias del proyecto
 └── README.md							# Documentación del proyecto
 ```
 ## 🛠️ Instalación
@@ -56,8 +55,8 @@ Edita el archivo config.yaml para definir la URL base, el navegador y las creden
 base_url: "http://example.com"
 browser: "chrome"
 credentials:
-	user_email: "user@example.com"
-	user_password: "password123"
+    user_email: "user@example.com"
+    user_password: "password123"
 ```
 2. Ejecutar pruebas
 Ejecutar todas las pruebas:

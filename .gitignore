@@ -1,45 +1,64 @@
-# Entornos virtuales
-venv/
-.env/
-.venv/
-
-# Archivos de configuración locales
-#config/*.yaml
-!config/environments.yaml  # Excluir todos menos el archivo base de configuración
-
-# Archivos de logs y reportes
-reports/logs/
-reports/screenshots/
-reports/html/
-reports/coverage/
-reports/xml/
-
-# Archivos temporales y de caché de Python
+# Python
 *.pyc
 *.pyo
 *.pyd
 __pycache__/
+*.swp
+*.swo
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
 *.cache
-*.egg-info/
+
+# Virtual Environment
+venv/
+env/
+ENV/
+.venv
+.ENV/
 
 # Archivos de Pytest
 *.xml
 *.html
 .cache/
 .pytest_cache/
+.cache/
+.pytest_cache/
+
+
+# Archivos de configuración locales
+#config/*.yaml
+!config/environments.yaml  # Excluir todos menos el archivo base de configuración
+
+# Logs
+*.log
+*.debug
+
+
+# Archivos de logs y reportes
+reports/coverage/
+reports/html/
+reports/logs/
+reports/screenshots/
+reports/xml/
+test-output.xml
+
 
 # Archivos de cobertura de código
 htmlcov/
 .coverage
 .coverage.*
+reports/coverage/
 
-# Archivos de depuración o de entorno
-*.log
-*.debug
+# Selenium
+selenium-screenshots/
 
 # Archivos generados por IDEs
 .idea/
 .vscode/
+.history/
 *.iml
 
 # Archivos del sistema operativo

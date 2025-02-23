@@ -1,5 +1,11 @@
 repos:
-  - repo: https://github.com/PyCQA/flake8
-    rev: 6.0.0  # Usa la última versión de Flake8
+  - repo: https://github.com/john-hen/Flake8-pyproject
+    rev: 1.2.3  # Usa la última versión de Flake8
     hooks:
-      - id: flake8
+      - id: Flake8-pyproject
+  - repo: https://github.com/PyCQA/bandit
+    rev: 1.8.3  # Usa la última versión de Bandit
+    hooks:
+    - id: bandit
+      args: ["-c", "pyproject.toml"]
+      additional_dependencies: ["bandit[toml]"]

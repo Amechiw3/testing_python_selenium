@@ -1,0 +1,78 @@
+[project]
+name = "testing_python_selenium"
+version = "1.0.0"
+description = "Automation testing"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "selenium",
+    "webdriver_manager",
+    "pytest",
+    "pytest-cov",
+    "pytest-html",
+    "pytest-xdist",
+    "pytest-nunit",
+    "pytest-azurepipelines",
+    "azure-devops",
+    "pyyaml",
+    "faker",
+    "python-dateutil",
+    "Flake8-pyproject",
+    "pre-commit",
+]
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "--strict-markers --tb=auto --cov=src --cov-report=xml"
+testpaths = [
+    "src/tests"
+]
+markers = [
+    "smoke: Pruebas rápidas para verificar funcionalidades críticas.",
+	"regression: Pruebas de regresión para asegurar que no hay fallos en funciones existentes.",
+	"slow: Pruebas que pueden tardar más tiempo en ejecutarse.",
+    "blaze: Pruebas relacionadas con blaze."
+]
+junit_suite_name = "TestSuite"
+junit_family = "xunit2"
+
+[tool.flake8]
+max-line-length = 10
+ignore = [
+    "E203",
+    "E266",
+    "W503",
+    "F403",
+    "F401",
+    "E722"
+]
+exclude = [
+    ".git",
+    "__pycache__",
+    ".venv",
+    "venv",
+    "reports",
+    "build",
+    "docs",
+    "htmlcov",
+    "migrations"
+]
+filename = "*.py"
+statistics = true
+
+[tool.bandit]
+exclude_dirs = [
+    ".git",
+    ".venv",
+    ".vscode",
+    "__pycache__",
+    ".venv",
+    "venv",
+    "reports",
+    "build",
+    "docs",
+    "htmlcov",
+    "migrations"
+]
+tests = ["B201", "B301"]
+skips = ["B101", "B107", "B311", "B601"]
