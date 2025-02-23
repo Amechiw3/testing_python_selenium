@@ -15,8 +15,8 @@ testing_python_selenium/
 │   ├── xml/                               # Reportes de junit
 ├── src/
 │   ├── config/
-│   │   ├── config.yaml					   # Configuración general
-│   │   ├── config_dev.yaml		           # Configuración para desarrollo
+│   │   ├── config.yaml                    # Configuración general
+│   │   ├── config_dev.yaml                # Configuración para desarrollo
 │   │   ├── config_staging.yaml	           # Configuración para staging
 │   │   ├── config_production.yaml         # Configuración para producción
 │   ├── pages/
@@ -24,12 +24,12 @@ testing_python_selenium/
 │   ├── tests/
 │   │   ├── conftest.py                    # Configuración de Pytest y fixtures
 │   ├── utils/
-│   │   ├── config.py					                # Clase para manejar configuraciones
-├── .pre-commit-config.yaml               # Configuración de hooks de pre-commit
-├── .azure-pipelines.yml                  # Archivo de configuración para la CI con Azure Pipelines, que define los pasos de construcción, pruebas y despliegue del proyecto.
-├── pytest.ini                            # Configuración global de Pytest
-├── requirements.txt                      # Dependencias del proyecto
-└── README.md							# Documentación del proyecto
+│   │   ├── config.py                      # Clase para manejar configuraciones
+├── .pre-commit-config.yaml                # Configuración de hooks de pre-commit
+├── .azure-pipelines.yml                   # Archivo de configuración para la CI con Azure Pipelines, que define los pasos de construcción, pruebas y despliegue del proyecto.
+├── pytest.ini                             # Configuración global de Pytest
+├── requirements.txt                       # Dependencias del proyecto
+└── README.md                              # Documentación del proyecto
 ```
 ## 🛠️ Instalación
 1.  Clonar el repositorio
