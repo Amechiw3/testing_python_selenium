@@ -1,26 +1,51 @@
 import time
 import pytest
-import unittest
 from datetime import datetime
-from pages.demoblazePage import demoblazePage
+from framework.pages.demoblazePage import demoblazePage
+from framework.utilities.configuration import Configuration
 
 
 @pytest.mark.blaze
-class TestDemoblaze(unittest.TestCase):
-    log_name = "TestDemoblaze_Logger"
-    log_date = datetime.now().date()
-    log_datetime = datetime.now().strftime("%Y-%m-%d %H.%M.%S")
-    screenshotDIR = f"Demoblaze/Demoblaze_{log_date}/Demoblaze_{log_datetime}"
-    log_DIR = f"Demoblaze/Demoblaze_{log_date}/Demoblaze_{log_datetime}"
+class TestDemoblaze:
+    logger_name = "demoblaze_logger"
+    logger_date = datetime.now().date()
+    logger_datetime = datetime.now().strftime("%Y-%m-%d %H.%M.%S")
+    logger_dir = f"demoblaze/demoblaze_{logger_date}/demoblaze_{logger_datetime}"
+    screenshot_dir = f"demoblaze/screenshots/demoblaze_{logger_date}/demoblaze_{logger_datetime}"
 
-    def test01_Go_To_Page(self, driver, config):
-        testName = "Test01_Go_To_PAGE"
-        self.log_name = f"{self.log_name}_{testName}"
-        self.screenshotDIR = f"{self.screenshotDIR}/{testName}"
-        self.log_DIR = f"{self.log_DIR}/{testName}"
-
-        demoblaze = demoblazePage(
-            driver, config, self.log_name, self.screenshotDIR, self.log_DIR, testName
+    def setup_test(self, test_name):
+        self.logger_name = f"{self.logger_name}::{test_name}"
+        self.logger_dir = f"{self.logger_dir}/{test_name}"
+        self.screenshot_dir = f"{self.screenshot_dir}/{test_name}"
+    
+    """
+    def test01_Go_To_Page(self, ui_adapter):
+        test_name = "test01_Go_To_Page"
+        self.setup_test(test_name)
+        test_config = Configuration(
+            config=ui_adapter.config,
+            screenshot_dir=self.screenshot_dir,
+            logger_name=self.logger_name,
+            logger_dir=self.logger_dir,
+            test_name=test_name
         )
+
+        demoblaze = demoblazePage(ui_adapter, test_config)
         demoblaze.go_to_page()
+        time.sleep(10)
+    """
+    def test02_File_Exists(self, ui_adapter):
+        test_name = "test02_File_Exists"
+        self.setup_test(test_name)
+        test_config = Configuration(
+            config=ui_adapter.config,
+            screenshot_dir=self.screenshot_dir,
+            logger_name=self.logger_name,
+            logger_dir=self.logger_dir,
+            test_name=test_name
+        )
+
+        demoblaze = demoblazePage(ui_adapter, test_config)
+        demoblaze.go_to_page()
+        assert demoblaze.file_exists("test-output")
         time.sleep(10)

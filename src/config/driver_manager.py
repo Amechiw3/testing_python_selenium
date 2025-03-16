@@ -1,4 +1,6 @@
 import os
+from datetime import datetime
+
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.chrome.options import Options as ChromeOptions
@@ -12,9 +14,7 @@ from selenium.webdriver.edge.service import Service as EdgeService
 from selenium.webdriver.edge.options import Options as EdgeOptions
 from webdriver_manager.microsoft import EdgeChromiumDriverManager
 
-from utils.logger import setup_logger
-
-logger = setup_logger()
+from framework.utilities.logger import setup_logger
 
 
 class DriverManager:
@@ -27,9 +27,16 @@ class DriverManager:
         EDGE: "msedgedriver.exe",
     }
 
+    logger_name = "driver_manager_logger"
+    logger_date = datetime.now().date()
+    logger_datetime = datetime.now().strftime("%Y-%m-%d %H.%M.%S")
+    logger_dir = f"driver/driver_{logger_date}/driver_{logger_datetime}"
+
     def __init__(self, config):
-        logger.info(f"Inicializando DriverManager con configuración: {config}")
         self.config = config
+        self.logger = setup_logger(self.logger_name, self.logger_dir)
+        self.logger.info("Inicializando DriverManager")
+        self.logger.info(f"Inicializando DriverManager con configuración: {config}")
 
     def get_driver(self):
         browser = self.config.get("browser", self.CHROME).lower()
@@ -45,7 +52,7 @@ class DriverManager:
             else:
                 raise ValueError(f"Navegador '{browser}' no está soportado.")
         except Exception as e:
-            logger.error(f"Error al inicializar el WebDriver: {e}")
+            self.logger.error(f"Error al inicializar el WebDriver: {e}")
             raise Exception("Error al inicializar el WebDriver")
 
     def _get_chrome_driver(self, headless):
@@ -73,9 +80,7 @@ class DriverManager:
         if headless:
             options.add_argument("--headless")
         options.add_argument("--start-maximized")
-        service = FirefoxService(
-            executable_path=self._get_driver_path(self.DRIVER_PATHS[self.FIREFOX])
-        )
+        # service = FirefoxService(executable_path=self._get_driver_path(self.DRIVER_PATHS[self.FIREFOX]))
         service = FirefoxService(executable_path=GeckoDriverManager().install())
         return webdriver.Firefox(service=service, options=options)
 
@@ -85,9 +90,7 @@ class DriverManager:
             options.add_argument("--headless")
         options.add_argument("--start-maximized")
         options.add_experimental_option("excludeSwitches", ["enable-logging"])
-        service = EdgeService(
-            executable_path=self._get_driver_path(self.DRIVER_PATHS[self.EDGE])
-        )
+        # service = EdgeService(executable_path=self._get_driver_path(self.DRIVER_PATHS[self.EDGE]))
         service = EdgeService(executable_path=EdgeChromiumDriverManager().install())
         return webdriver.Edge(service=service, options=options)
 
