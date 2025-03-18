@@ -17,7 +17,7 @@ class TestDemoblaze:
         self.logger_name = f"{self.logger_name}::{test_name}"
         self.logger_dir = f"{self.logger_dir}/{test_name}"
         self.screenshot_dir = f"{self.screenshot_dir}/{test_name}"
-    
+
     """
     def test01_Go_To_Page(self, ui_adapter):
         test_name = "test01_Go_To_Page"
@@ -47,5 +47,5 @@ class TestDemoblaze:
 
         demoblaze = demoblazePage(ui_adapter, test_config)
         demoblaze.go_to_page()
-        assert demoblaze.file_exists("test-output")
+        demoblaze.file_exists("test-output")
         time.sleep(10)

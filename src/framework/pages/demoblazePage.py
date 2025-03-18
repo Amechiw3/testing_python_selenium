@@ -20,4 +20,5 @@ class demoblazePage:
 
     def file_exists(self, file_path):
         """Verifica si un archivo existe."""
-        return self.ui_adapter.wait_manager.wait_for_file_download(file_path)
+        assert self.ui_adapter.wait_manager.file_exists(file_path)
+        self.ui_adapter.wait_manager.remove_downloads()

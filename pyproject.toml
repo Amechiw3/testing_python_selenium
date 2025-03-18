@@ -23,7 +23,7 @@ dependencies = [
 
 [tool.pytest.ini_options]
 minversion = "6.0"
-addopts = "--strict-markers --tb=auto --cov=src --cov-report=xml"
+addopts = "--strict-markers --tb=auto --no-cov --cov-report=xml"
 testpaths = [
     "src/tests"
 ]
